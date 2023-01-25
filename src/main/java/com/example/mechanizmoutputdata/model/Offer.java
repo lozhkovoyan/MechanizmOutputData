@@ -16,5 +16,6 @@ public class Offer {
     @Id
     private UUID offerId;
     private boolean exposable;
+    private boolean isDefauleTransfer;
     private String clientFullFIO;
 }

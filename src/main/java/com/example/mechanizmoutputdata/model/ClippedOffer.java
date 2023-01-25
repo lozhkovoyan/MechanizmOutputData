@@ -12,8 +12,8 @@ import java.util.UUID;
 @Getter
 @Setter
 @AllArgsConstructor
-@Entity
 @NoArgsConstructor
+@Entity
 public class ClippedOffer {
 
     @Id

@@ -27,38 +27,26 @@ public class OutputData {
     SenderMessages senderMessages; //add mock
 
     public void transferData() {
-        val offerList = offerRepository.getOffersByExposableLimitedTo(10000);
+        val offerList = offerRepository.getLimitByOffersByDefauleTransferNull(10000);
         val converted = convert(offerList);
         clippedOfferRepository.saveAll(converted);
         senderMessages.sent(offerList);
+        isTransferPod = true;
     }
 
     private List<ClippedOffer> convert(List<Offer> offerList) {
         List<ClippedOffer> clippedOffers = new ArrayList<>();
         for (Offer offer : offerList) {
             ClippedOffer clippedOffer = new ClippedOffer(UUID.randomUUID(), prepareFIO(offer.getClientFullFIO()));
-            offer.setExposable(true);
+            offer.setDefauleTransfer(true);
             clippedOffers.add(clippedOffer);
         }
         return clippedOffers;
     }
 
     private String prepareFIO(String clientFullFIO) {
-//        В строке clientFullFIO оставить только Фамилия и инициалы ИО
-        String s = clientFullFIO.toLowerCase();
-
-        StringBuilder sb = new StringBuilder();
-        sb.append(s.substring(0, clientFullFIO.indexOf(' ')));
-
-        int i = sb.length();
-        int count = 0;
-        while (count < 2 && i < clientFullFIO.length()) {
-            if (clientFullFIO.charAt(i) == ' ') {
-                count++;
-                sb.append(" ").append(clientFullFIO.toUpperCase().charAt(i + 1)).append(".");
-            }
-            i++;
-        }
-        return sb.toString();
+        String[] strFio = clientFullFIO.split(" ");
+        clientFullFIO = strFio[0] + " " + strFio[1].charAt(0) + ". " + strFio[2].charAt(0) + ". ";
+        return clientFullFIO;
     }
 }
